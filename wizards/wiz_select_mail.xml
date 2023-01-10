@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_wiz_select_mail_form">
+        <field name="name">wiz.select.mail.form</field>
+        <field name="model">wiz.select.mail</field>
+        <field name="type">form</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="Selection type de mail">
+                    <group>
+                        <field name="template_id" widget="selection" />
+                        <field name="transit_id" invisible="1"/>
+                        <field name="line_to_mail_ids" invisible="1"/>
+                    </group>
+            </form>
+            <footer>
+                <button class="oe_highlight" type="object" name="validate" string="Selectionner" />
+                ou
+                <button class="oe_link" special="cancel" string="Cancel" />
+            </footer>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_wiz_select_mail">
+        <field name="name">Selection type de mail</field>
+        <field name="res_model">wiz.select.mail</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_transit_id': active_id}</field>
+        <field name="view_id" ref="view_wiz_select_mail_form" />
+    </record>
+
+</odoo>

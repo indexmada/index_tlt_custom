@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_res_shipper_form">
+        <field name="name">Shippers Form</field>
+        <field name="model">res.shipper</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="image" widget='image' class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Nom"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="street"/>
+                            <field name="street2"/>
+                            <field name="country_id" options='{"no_open": True, "no_create": True}'/>
+                        </group>
+                        <group>
+                            <field name="email" widget="email"/>
+                            <field name="phone" widget="phone"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="view_res_shipper_tree">
+      <field name="name">Shippers Tree</field>
+      <field name="model">res.shipper</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name='name'/>
+            <field name='street'/>
+            <field name='email'/>
+            <field name='phone'/>
+            <field name='country_id'/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="res_shipper_kanban_view">
+            <field name="name">Shippers Kanban</field>
+            <field name="model">res.shipper</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <field name='image'/>
+                    <field name='name'/>
+                    <field name='street'/>
+                    <field name='email'/>
+                    <field name='phone'/>
+                    <field name='country_id'/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_res_partner_kanban">
+                                <div class="o_kanban_image">
+                                    <t t-if="record.image.raw_value">
+                                        <img t-att-src="kanban_image('res.shipper', 'image', record.id.value)"/>
+                                    </t>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="oe_partner_heading"><field name="name"/></strong>
+                                    <ul>
+                                        <li t-if="record.street.raw_value"><field name="street"/></li>
+                                        <li t-if="record.country_id.raw_value"><field name="country_id"/></li>
+                                        <li t-if="record.phone.raw_value"><field name="phone"/></li>
+                                        <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+    
+    <record model="ir.actions.act_window" id="action_res_shipper">
+      <field name="name">Shippers</field>
+      <field name="res_model">res.shipper</field>
+      <field name="view_type">form</field>
+      <field name='view_mode'>kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Shippers
+            </p>
+            <p>
+                Enregistrer les Shippers ici.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_shipper"
+        name="Shippers"
+        parent="menu_documentation_management_root"
+        action="action_res_shipper"/>
+</odoo>

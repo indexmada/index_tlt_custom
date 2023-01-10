@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_transit_management_form">
+        <field name="name">Manifeste Form</field>
+        <field name="model">transit.management</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="validate" type="object" string="Valider" class="btn-primary" states="new" groups="transit_operation_management.group_manifeste_RDO,transit_operation_management.group_manifeste_manager"/>
+                    <button name="action_cancel" type="object" string="Annuler" states="confirmed" groups="transit_operation_management.group_manifeste_manager"/>
+                    <button type="object" name="wiz_select_mail" string="Envoyer un Mail" />
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="alert-info" attrs="{'invisible': [('is_departure_date_changed', '=', False), ('is_arrival_date_changed', '=', False)]}">
+                        <div class="alert-info" attrs="{'invisible': [('is_departure_date_changed', '=', False), ('is_arrival_date_changed', '=', True)]}">
+                            La DATE DE DÉPART a été mise à jour.
+                        </div>
+                        <div class="alert-info" attrs="{'invisible': [('is_arrival_date_changed', '=', False), ('is_departure_date_changed', '=', True)]}">
+                            La DATE D'ARRIVÉE a été mise à jour.
+                        </div>
+                        N'oubliez pas d'envoyer le mail pour <b><button type="object" name="send_mail_date_changed" string="Avis de changement de date" class="oe_link oe_inline" /></b>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="ref_groupage" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="groupage" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="ref_shipping" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="vessel" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="travel" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="loading_port" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="discharge_port" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                        </group>
+                        <group>
+                            <field name="security_key" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="create_uid" readonly="1" string="Opérateur"/>
+                            <field name="create_date" readonly="1" string="Créé le"/>
+                            <field name="departure_date" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="arrival_date" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                            <field name="is_departure_date_changed" invisible="1" />
+                            <field name="is_arrival_date_changed" invisible="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Ligne de Manifeste">
+                            <field name="line_ids" nolabel="1" attrs="{'readonly': [('state', '=', 'confirmed')]}">
+                                <tree editable="bottom">
+                                    <field name="name" />
+                                    <field name="shipper_id"/>
+                                    <field name="cnee"/>
+                                    <field name="colis_number"/>
+                                    <field name="packaging"/>
+                                    <field name="description"/>
+                                    <field name="amount" />
+                                    <field name="currency_id"/>
+                                    <field name="weight"/>
+                                    <field name="m3"/>
+                                    <field name="phone"/>
+                                    <field name="email"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <button type="object" name="print_fcr_original" string="FCR" />
+                                    <button type="object" name="print_fcr_duplicatas" string="FCR(Duplicatas)" />
+                                    <button type="object" name="print_bad" string="BAD" />
+                                </tree>
+                            </field>
+                            <field name="line_to_mail_ids" nolabel="1" attrs="{'readonly': [('state', '=', 'confirmed')]}" invisible="1">
+                                <tree editable="bottom">
+                                    <field name="name" />
+                                    <field name="shipper_id"/>
+                                    <field name="cnee"/>
+                                    <field name="colis_number"/>
+                                    <field name="packaging"/>
+                                    <field name="description"/>
+                                    <field name="amount" />
+                                    <field name="currency_id"/>
+                                    <field name="weight"/>
+                                    <field name="m3"/>
+                                    <field name="phone"/>
+                                    <field name="email"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <button type="object" name="print_fcr_original" string="FCR" />
+                                    <button type="object" name="print_fcr_duplicatas" string="FCR(Duplicatas)" />
+                                    <button type="object" name="print_bad" string="BAD" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Les dates d'arrivée et de départ sont toujours modifiables même à l'état validé par un Gestionnaire -->
+    <record model="ir.ui.view" id="view_transit_management_form_inherit">
+        <field name="name">transit.management.form.inherit</field>
+        <field name="model">transit.management</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="view_transit_management_form" />
+        <field name="groups_id" eval="[(4, ref('transit_operation_management.group_manifeste_manager'))]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='departure_date']" position="attributes">
+                <attribute name="attrs">{}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='arrival_date']" position="attributes">
+                <attribute name="attrs">{}</attribute>
+            </xpath>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="view_transit_management_tree">
+      <field name="name">Manifeste Tree</field>
+      <field name="model">transit.management</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name='name'/>
+            <field name='ref_groupage'/>
+            <field name='groupage'/>
+            <field name='ref_shipping'/>
+            <field name='vessel'/>
+            <field name="loading_port"/>
+            <field name="discharge_port"/>
+            <field name="shipper_id" invisible="1"/>
+            <field name="cnee" invisible="1"/>
+            <field name="currency_id" invisible="1"/>
+        </tree>
+      </field>
+    </record>
+    
+    <record model="ir.ui.view" id="view_transit_management_search">
+      <field name="name">Manifeste Search</field>
+      <field name="model">transit.management</field>
+      <field name="type">search</field>
+      <field name="arch" type="xml">
+        <search>
+            <field name='shipper_id'/>
+            <field name='cnee'/>
+            <field name='currency_id'/>
+        </search>
+      </field>
+    </record>
+    
+    <record model="ir.actions.act_window" id="action_transit_management">
+      <field name="name">Manifeste</field>
+      <field name="res_model">transit.management</field>
+      <field name="view_type">form</field>
+      <field name='view_mode'>tree,form</field>
+    </record>
+    
+    <menuitem
+        id="menu_transit_management_root"
+        name="Gestion des opérations"
+        web_icon="transit_operation_management,static/src/img/menu.png"/>
+    <menuitem
+        id="menu_manifeste"
+        name="Manifeste"
+        parent="menu_documentation_management_root"
+        action="action_transit_management"
+        sequence="1"/>
+</odoo>

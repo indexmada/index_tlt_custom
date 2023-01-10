@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_transit_management_line_form">
+        <field name="name">Ligne de manifeste Form</field>
+        <field name="model">transit.management.line</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="shipper_id"/>
+                            <field name="cnee"/>
+                            <field name="colis_number"/>
+                            <field name="packaging"/>
+                        </group>
+                        <group>
+                            <field name="currency_id"/>
+                            <field name="weight"/>
+                            <field name="m3"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                        </group>
+                    </group>
+                    <group string="Descriptif des Marchandises">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="view_transit_management_line_tree">
+      <field name="name">Ligne de manifeste Tree</field>
+      <field name="model">transit.management.line</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name='shipper_id'/>
+            <field name='cnee'/>
+            <field name='colis_number'/>
+            <field name='weight'/>
+        </tree>
+      </field>
+    </record>
+</odoo>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+
+    <record id="mail_template_avis_arrivee" model="mail.template">
+        <field name="name">Avis d'arrivée</field>
+        <field name="subject">[${object.transit_id.name}] Avis d'arrivée</field>
+        <field name="email_from"><![CDATA[${user.company_id.name} < ${(user.company_id.email)|safe}>]]></field>
+        <field name="model_id" ref="transit_operation_management.model_transit_management_line"/>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[<html>
+            A l’attention de ${object.cnee.title.name or ''} ${object.cnee.name or ''}, <br/>
+            <h1><b><u>AVIS D'ARRIVÉE</u></b></h1>
+            Nous vous informons que vous êtes le destinataire des marchandises ci-dessous :
+            <ul>
+                <li>Nb de colis : ${object.colis_number}</li>
+                <li>Disant contenir  : ${object.description or '....'}</li>
+                <li>Poids : ${object.weight|safe} Kgs</li>
+                <li>Volume : ${object.m3} m3</li>
+            </ul><br/>
+
+            <p>Vos colis sont bien chargés dans le conteneur ..... sous la référence G .... . Départ du Havre le : ...., prévus arriver à Tamatave le : .... .</p><br/>
+
+            <p>Notre service GROUPAGE se met à votre entière disposition au 034 02 753 10 – <a href="mailto:contact.tlt@transit-madagascar.com">contact.tlt@transit-madagascar.com</a>, pour tout renseignement que vous souhaiteriez avoir.</p><br/>
+
+            <p>Nous vous prions de trouver ci-joint le FCR relatif à votre arrivage. Nous vous demandons de bien vouloir vérifier les informations mentionnés dans ce document. Vous disposez jusqu’à .... pour nous notifier les changements que vous désirez. Passé ce délai, une pénalité de 500.000Ar est applicable.</p><br/>
+
+            <p>Vous pouvez faire un suivi du container sur le site de la CMA-CGM: ou bien directement avec ce lien : <a href="https://www.cma-cgm.fr/ebusiness/tracking/search?SearchBy=Container&Reference=SEGU4964956&search=Rechercher">https://www.cma-cgm.fr/ebusiness/tracking/search?SearchBy=Container&Reference=SEGU4964956&search=Rechercher</a></p><br/>
+
+            <p>Nous vous remercions de votre confiance,</p>
+            </html>
+        ]]></field>
+    </record>
+
+            
+
+    <record id="mail_template_avis_changement_date" model="mail.template">
+        <field name="name">Avis de changement de date</field>
+        <field name="subject">[${object.transit_id.name}] Avis de changement de date</field>
+        <field name="email_from"><![CDATA[${user.company_id.name} < ${(user.company_id.email)|safe}>]]></field>
+        <field name="model_id" ref="transit_operation_management.model_transit_management_line"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html"><![CDATA[<html>
+            A l’attention de ${object.cnee.title.name or ''} ${object.cnee.name or ''}, <br/>
+            <h1><b><u>AVIS DE CHANGEMENT DE DATE D’ARRIVÉE</u></b></h1>
+
+            <p>Nous portons à votre connaissance que, suivant information reçue de la compagnie maritime, l’arrivée du conteneur de groupage n°.... sous la référence G.... . initialement prévu à Tamatave le ${object.transit_id.last_arrival_date} est reportée pour le ${object.transit_id.arrival_date} .</p><br/>
+
+            A titre de rappel, vous êtes le destinataire des marchandises ci-dessous :
+            <ul>
+                <li>Nb de colis : ${object.colis_number}</li>
+                <li>Disant contenir  : ${object.description or '....'}</li>
+                <li>Poids : ${object.weight} Kgs</li>
+                <li>Volume : ${object.m3} m3</li>
+            </ul><br/>
+
+            <p>Notre service GROUPAGE se met à votre entière disposition au 034 02 753 10 – <a href="mailto:contact.tlt@transit-madagascar.com">contact.tlt@transit-madagascar.com</a>, pour tout renseignement que vous souhaiteriez avoir.</p><br/>
+
+            <p>Nous vous prions de trouver ci-joint le FCR relatif à votre arrivage. Nous vous demandons de bien vouloir vérifier les informations mentionnés dans ce document. Vous disposez jusqu’à …..pour nous notifier les changements que vous désirez. Passé ce délai, une pénalité de 500.000Ar est applicable.</p><br/>
+
+            <p>Vous pouvez faire un suivi du container sur le site de la CMA-CGM: ou bien directement avec ce lien : <a href="https://www.cma-cgm.fr/ebusiness/tracking/search?SearchBy=Container&Reference=SEGU4964956&search=Rechercher">https://www.cma-cgm.fr/ebusiness/tracking/search?SearchBy=Container&Reference=SEGU4964956&search=Rechercher</a></p><br/>
+
+            <p>Nous vous remercions de votre confiance,</p>
+            </html>
+        ]]></field>
+    </record>
+
+    <record id="mail_template_confirmation_arrivee" model="mail.template">
+        <field name="name">Confirmation d’arrivée</field>
+        <field name="subject">[${object.transit_id.name}] Confirmation d’arrivée</field>
+        <field name="email_from"><![CDATA[${user.company_id.name} < ${(user.company_id.email)|safe}>]]></field>
+        <field name="model_id" ref="transit_operation_management.model_transit_management_line"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html"><![CDATA[<html>
+            A l’attention de ${object.cnee.title.name or ''} ${object.cnee.name or ''}, <br/>
+            <h1><b><u>CONFIRMATION D’ARRIVÉE</u></b></h1>
+
+            <p>Nous avons l’honneur de vous confirmer l’arrivée du conteneur de groupage N° ${object.transit_id.ref_groupage} au ${object.transit_id.discharge_port} , débarqué du navire ${object.transit_id.ref_shipping or '....'} le ${object.transit_id.departure_date}, disant contenir les marchandises à votre nom :</p><br/>
+
+            <ul>
+                <li>${object.description or '....'}</li>
+                <li>${object.colis_number}</li>
+                <li>${object.weight} Kgs</li>
+                <li>${object.m3} m3</li>
+            </ul><br/>
+
+            <p>Les procédures au niveau de la compagnie maritime sont en cours.<br/>
+            Notre service IMPORT se met à votre entière disposition pour tout renseignement que vous souhaiteriez avoir.</p><br/>
+
+            <p>Nous vous remercions de votre confiance,</p><br/>
+
+            <p>Le Service GROUPAGE</p>
+            </html>
+        ]]></field>
+    </record>
+
+    <record id="mail_template_confirmation_depotage" model="mail.template">
+        <field name="name">Confirmation de dépotage</field>
+        <field name="subject">[${object.transit_id.name}] Confirmation de dépotage</field>
+        <field name="email_from"><![CDATA[${user.company_id.name} < ${(user.company_id.email)|safe}<name />]]></field>
+        <field name="model_id" ref="transit_operation_management.model_transit_management_line"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html"><![CDATA[<html>
+            A l’attention de ${object.cnee.title.name or ''} ${object.cnee.name or ''}, <br/>
+            <h1><b><u>CONFIRMATION DE DÉPOTAGE</u></b></h1>
+
+            <p>Nous vous confirmons que le dépotage du conteneur N°.... sous la référence .... a été bien effectué.</p><br/>
+
+            <p>Vos colis ci-après se trouvent actuellement à l’hangar .... du port et le Gros d’éclatement est de .... du .... . </p><br/>
+
+            <ul>
+                <li>${object.colis_number} disant contenir : ${object.description or '....'}</li>
+                <li>${object.weight} Kgs</li>
+                <li>${object.m3} m3</li>
+            </ul><br/>
+
+            <p>Notre service GROUPAGE se met à votre entière disposition pour tout renseignement que vous souhaiteriez avoir.</p><br/>
+
+            </html>
+        ]]></field>
+    </record>
+
+</odoo>

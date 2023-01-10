@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem
+        id="menu_documentation_management_root"
+        name="DOCUMENTATION"
+        web_icon="transit_operation_management,static/src/img/documentation_icon.png"/>
+</odoo>

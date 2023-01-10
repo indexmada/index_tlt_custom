@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_state_form_form">
+        <field name="name">state.form.form</field>
+        <field name="model">state.form</field>
+        <field name="type">form</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button type="object" name="validate" string="Valider" states="new" class="oe_highlight" groups="transit_operation_management.group_manifeste_manager"/>
+                    <button name="action_cancel" type="object" string="Annuler" groups="transit_operation_management.group_manifeste_manager" attrs="{'invisible':['|', ('payment_ids','!=',[]), ('state','=','new')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_view_payment" string="Paiement" type="object" attrs="{'invisible':[('payment_ids','=',[])]}" icon="fa-usd"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="obs" invisible="1"/>
+                            <field name="transit_id" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'readonly': [('state', '=', 'confirmed')]}" />
+                            <field name="transit_line_id" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'readonly': [('state', '=', 'confirmed')]}" />
+                            <field name="dossier_number" attrs="{'readonly': [('state', '=', 'confirmed')]}" />
+                            <field name="partner_id" attrs="{'readonly': [('state', '=', 'confirmed')]}" />
+                            <field name="merchandise" attrs="{'readonly': [('state', '=', 'confirmed')]}" />
+                        </group>
+                        <group>
+                            <field name="name" attrs="{'readonly': [('state', '=', 'confirmed')]}" />
+                            <field name="payment_ids" invisible="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Ligne de la Feuille de situation">
+                            <field name="line_ids" nolabel="1" attrs="{'readonly': [('state', '=', 'confirmed')]}">
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="date" />
+                                            <field name="situation" />
+                                            <field name="amount" widget="monetary"/>
+                                            <field name="currency_id" invisible="1" />
+                                            <field name="partner_id" />
+                                            <field name="shipping_address" />
+                                        </group>
+                                    </group>
+                                </form>
+                                <tree editable="bottom" >
+                                    <field name="date" />
+                                    <field name="situation" />
+                                    <field name="amount" widget="monetary"/>
+                                    <field name="currency_id" invisible="1" />
+                                    <field name="partner_id" />
+                                    <field name="shipping_address" />
+                                    <field name="user_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_state_form_tree">
+        <field name="name">state.form.tree</field>
+        <field name="model">state.form</field>
+        <field name="type">tree</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="obs" />
+                <field name="dossier_number" />
+                <field name="partner_id" />
+				<field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_state_form_search">
+        <field name="name">state.form.search</field>
+        <field name="model">state.form</field>
+        <field name="type">search</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" filter_domain="[('name', 'ilike', self)]" />
+                <field name="obs" />
+                <field name="dossier_number" />
+                <field name="partner_id" />
+
+                <group expand="0" string="Group By">
+                    <filter string="Client" domain="[]" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_state_form">
+        <field name="name">Situation</field>
+        <field name="res_model">state.form</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="limit">80</field>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Situation
+            </p>
+            <p>
+                Créer vos feuilles de situation ici.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_state_form"
+        name="Situation"
+        parent="menu_transit_management_root"
+        action="action_state_form" />
+
+</odoo>

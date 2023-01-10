@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+
+    <template id="fcr_report" name="FCR Report">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <div class="row">
+                        <div class="col-xs-9" style="vertical-align:bottom;">
+                            <span style="color:#2E5496; font-weight:bold; font-size:25px;">FORWARDER CERTIFICATE OF RECEIPT (FCR)</span>
+                        </div>
+                        <div class="col-xs-3 text-right" style="line-height:3; vertical-align:bottom;">
+                            <t t-set="doc_number" t-value="o.transit_id.name + o.name"/>
+                            <t t-if='o.transit_id.security_key'>
+                                <t t-set="doc_number" t-value="doc_number + '_' + o.transit_id.security_key"/>
+                            </t>
+                            N° <span t-esc="doc_number" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table style="table-layout:fixed" class="table">
+                                <tr>
+                                    <td style="width:50%; font-weight:bold; color:#2E5496; border-right:1px solid black; border-top:1px solid black; border-bottom:0px !important;">SHIPPER</td>
+                                    <td style="width:50%; border:1px solid black; background-color:#CACACA; font-weight:bold; border-top:1px solid black;" name="version1">ORIGINAL 1/1</td>
+                                </tr>
+                                <tr>
+                                    <td style="border-right:1px solid black; border-top:0px !important; font-family:'Courier New';">
+                                        WALEXPORT P/C :<br/>
+                                        <t t-if="o.shipper_id">
+                                            <span t-field="o.shipper_id.name"/><br/>
+                                            <br/>
+                                            <span t-field="o.shipper_id.street"/><br/>
+                                            <span t-field="o.shipper_id.street2"/><br/>
+                                            <span t-field="o.shipper_id.country_id"/><br/>
+                                            <br/><br/>
+                                        </t>
+                                    </td>
+                                    <td rowspan="3" class="text-center" style="vertical-align:middle;">
+                                        <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 100px;"/>
+                                        <br/>
+                                        <span t-field="res_company.partner_id"
+                                            t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'
+                                            style="display:inline-block; font-weight:bold;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#2E5496; font-weight:bold; border-top:1px solid black; border-bottom:0px !important;">CONSIGNEE</td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top:0px !important; font-family:'Courier New';">
+                                        <t t-if="o.cnee">
+                                            <span t-field="o.cnee.name"/><br/>
+                                            <br/>
+                                            <span t-field="o.cnee.street"/><br/>
+                                            <span t-field="o.cnee.street2"/><br/>
+											<span t-field="o.cnee.city"/>
+											<span t-field="o.cnee.zip"/><br/>
+                                            <span t-field="o.cnee.country_id"/><br/>
+                                            <br/><br/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="padding:0px !important; border-top:solid black 1px;">
+                                        <table class="table" style="table-layout:fixed; margin:0px !important;">
+                                            <tr>
+                                                <td style="width:33%; border-right:solid black 1px; border-bottom:solid black 1px;" class="text-center">
+                                                    <p style="color:#2E5496; font-weight:bold;">Vessel</p>
+                                                    <t t-if="o.transit_id.vessel"><span t-esc="o.transit_id.vessel.upper()" style="font-family:'Courier New';"/></t>
+                                                </td>
+                                                <td style="width:33%; border-bottom:solid black 1px;" class="text-center">
+                                                    <p style="color:#2E5496; font-weight:bold;">Port of loading</p>
+                                                    <t t-if="o.transit_id.loading_port"><span t-esc="o.transit_id.loading_port.upper()" style="font-family:'Courier New';"/></t>
+                                                </td>
+                                                <td style="width:33%; border-left:solid black 1px; border-bottom:solid black 1px;" class="text-center">
+                                                    <p style="color:#2E5496; font-weight:bold;">Port of discharge</p>
+                                                    <t t-if="o.transit_id.discharge_port"><span t-esc="o.transit_id.discharge_port.upper()" style="font-family:'Courier New';"/></t>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="padding:0px !important;">
+                                        <table class="table" style="table-layout:fixed; margin:0px !important;">
+                                            <tr style="color:#2E5496;">
+                                                <td class="text-center" style="width:16.5%; border-top:0px !important;">Marks &amp; Numbers</td>
+                                                <td class="text-center" style="width:16.5%; border-top:0px !important;">No of Package</td>
+                                                <td class="text-center" style="width:33%; border-top:0px !important;">Description of packaging and goods</td>
+                                                <td class="text-center" style="width:16.5%; border-top:0px !important;">Gross Weight</td>
+                                                <td class="text-center" style="width:16.5%; border-top:0px !important;">Measurement</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5" class="text-center" style="border-top:0px !important; padding-top:30px;">
+                                                    <t t-if="o.transit_id.ref_shipping"><span t-esc="o.transit_id.ref_shipping.upper()" style="font-family:'Courier New';"/></t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center" style="border-top:0px !important; font-family:'Courier New';"><span t-field="o.colis_number"/></td>
+                                                <td class="text-center" style="border-top:0px !important; font-family:'Courier New';"><span t-field="o.packaging"/></td>
+                                                <td class="text-center" style="border-top:0px !important; font-family:'Courier New';"><span t-field="o.description"/></td>
+                                                <td class="text-center" style="border-top:0px !important; font-family:'Courier New';"><span t-field="o.weight"/></td>
+                                                <td class="text-center" style="border-top:0px !important; font-family:'Courier New';"><span t-if="o.m3" t-field="o.m3"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top:160px;">
+                        <div class="col-xs-12 text-center">
+                            <span style="font-size:100px; color:#CACACA; font-weight:bold; opacity:0.5" name="version2">ORIGINAL</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table class="table" style="color:#2E5496; table-layout:fixed;">
+                                <tr>
+                                    <td style="border:solid black 1px; width:50%; font-weight:bold;" class="text-center">TLT</td>
+                                    <td style="border:solid black 1px; width:50%;">
+                                        <p style="font-size:10px;">Received the above mentioned marchandise, goods or packages for shipment as indicated on Bill of Lading which shall constitute the contract</p>
+                                        <br/><br/><br/>
+                                        <div class="row mb32" style="font-weight:bold;">
+                                            <div class="col-xs-4 col-xs-offset-2">By</div>
+                                            <div class="col-xs-4"/>
+                                        </div>
+                                        <div class="row mb32" style="font-weight:bold;">
+                                            <div class="col-xs-4 col-xs-offset-2">Date</div>
+                                            <div class="col-xs-4"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="fcr_report_duplicatas" name="FCR Report (Duplicatas)" inherit_id="fcr_report" primary="True">
+        <xpath expr="//td[@name='version1']" position="replace">
+            <td style="width:50%; border:1px solid black; background-color:#CACACA; font-weight:bold; border-top:1px solid black;" name="version1">COPIE NON NEGOTIABLE 1/1</td>
+        </xpath>
+        <xpath expr="//span[@name='version2']" position="replace">
+            <span style="font-size:60px; color:#CACACA; font-weight:bold; opacity:0.5" name="version2">COPIE NON NEGOTIABLE</span>
+        </xpath>
+    </template>
+
+    <record id="fcr_report_paperformat" model="report.paperformat">
+        <field name="name">FCR report paperformat without header and footer</field>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">7</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">12</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <report
+        id="action_fcr_report"
+        model="transit.management.line"
+        report_type="qweb-pdf"
+        string="FORWARDER CERTIFICATE OF RECEIPT"
+        paperformat="fcr_report_paperformat"
+        menu="False"
+        name="transit_operation_management.fcr_report"
+        file="transit_operation_management.fcr_report" />
+
+    <report
+        id="action_fcr_report_duplicatas"
+        model="transit.management.line"
+        report_type="qweb-pdf"
+        string="FORWARDER CERTIFICATE OF RECEIPT(Duplicatas)"
+        paperformat="fcr_report_paperformat"
+        menu="False"
+        name="transit_operation_management.fcr_report_duplicatas"
+        file="transit_operation_management.fcr_report" />
+
+</odoo>

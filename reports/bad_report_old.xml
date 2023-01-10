@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="bad_report" name="Bon à délivrer">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="custom_report.external_layout_header_account_sale"/>
+                <div class="page" style="line-height:2; font-size:16px; font-family:'Courier New';">
+                    <div class="row">
+                        <div class="col-xs-12 text-center mb32">
+                            <span style="border-bottom:solid #CACACA 1px;"><span style="color:#CACACA; font-size:60px; font-weight:bold;">BON A DELIVRER</span></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            Veuillez délivrer à : <br/>
+                            Transit : <br/>
+                            P/C : <span t-field="o.cnee" /> <br/>
+                            Les marchandises sous détaillées : <br/>
+                            <span t-field="o.description" /><br/>
+                        </div>
+                    </div>
+
+                    <div class="row mt32">
+                        <div class="col-xs-3">
+                            Nb de colis
+                        </div>
+                        <div class="col-xs-9">
+                            : <span t-field="o.colis_number" />
+                        </div>
+                        <div class="col-xs-3">
+                            Poids
+                        </div>
+                        <div class="col-xs-9">
+                            : <span t-field="o.weight" />
+                        </div>
+                        <div class="col-xs-3">
+                            Volume
+                        </div>
+                        <div class="col-xs-9">
+                            : <span t-if="o.m3" t-field="o.m3" />
+                        </div>
+                    </div>
+
+                    <div class="row mt32">
+                        <div class="col-xs-3">
+                            Selon l’arrivage suivant :
+                        </div>
+                        <div class="col-xs-9"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            Partie
+                        </div>
+                        <div class="col-xs-9">
+                            : <span t-field="o.transit_id.ref_shipping" />
+                        </div>
+                        <div class="col-xs-3">
+                            FCR
+                        </div>
+                        <div class="col-xs-9">
+                            <t t-set="doc_number" t-value="o.transit_id.name + o.name"/>
+                            <t t-if='o.transit_id.security_key'>
+                                <t t-set="doc_number" t-value="doc_number + '_' + o.transit_id.security_key"/>
+                            </t>
+                            : <span t-esc="doc_number" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Navire : <span t-field="o.transit_id.vessel" /></div>
+                        <div class="col-xs-4">Voyage : <span t-field="o.transit_id.travel" /></div>
+                        <div class="col-xs-4">du : <span t-field="o.transit_id.arrival_date" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">GE N° : </div>
+                    </div>
+
+                    <div class="row mt32">
+                        <div class="col-xs-4 pull-right">
+                            Antananarivo, le 
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="bad_report_paperformat" model="report.paperformat">
+        <field name="name">BAD report paperformat without footer</field>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">12</field>
+        <field name="margin_right">12</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <report
+        id="action_bad_report"
+        model="transit.management.line"
+        report_type="qweb-pdf"
+        string="BON A DELIVRER"
+        paperformat="bad_report_paperformat"
+        attachment_use="True"
+        menu="False"
+        name="transit_operation_management.bad_report"
+        file="transit_operation_management.bad_report" />
+
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_register_situation_payment_form">
+        <field name="name">register.situation.payment.form</field>
+        <field name="model">register.situation.payment</field>
+        <field name="type">form</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="journal_id" />
+                            <field name="amount" widget="monetary" />
+                        </group>
+                        <group>
+                            <field name="payment_date" />
+                            <field name="name" />
+                            <field name="currency_id" invisible="1"/>
+                            <field name="state_form_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+            <footer>
+                <button class="oe_highlight" type="object" name="post" string="Valider et Payer" />
+                ou
+                <button class="oe_highlight" type="object" name="validate" string="Valider" />
+                ou
+                <button class="oe_link" special="cancel" string="Annuler" />
+            </footer>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_register_situation_payment">
+        <field name="name">Enregister un paiement pour la situation</field>
+        <field name="res_model">register.situation.payment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_register_situation_payment_form" />
+    </record>
+
+</odoo>

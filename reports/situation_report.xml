@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="situation_report" name="Situation">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-xs-4 pull-right">
+                                <span style="font-size:20px;"><b><u><span t-field="o.partner_id" /></u></b></span>
+                                <address t-field="o.partner_id"
+                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
+                            </div>
+                        </div>
+
+                        <div class="row mb32" style="margin-top:100px;">
+                            <div class="col-xs-4">
+                                <b><u>Réf Manifeste:</u></b><br/>
+                                <span t-field="o.transit_id" />
+                            </div>
+                            <div class="col-xs-4">
+                                <b><u>Réf Ligne Manifeste:</u></b><br/>
+                                <span t-field="o.transit_line_id" />
+                            </div>
+                        </div>
+
+                        <div class="row mb16">
+                            <div class="col-xs-12 text-center" style="font-size:30px;">
+                                <b><u>SITUATION N° <span t-field="o.name" /></u></b>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <table class="table table-bordered" style="table-layout:fixed; border-bottom:0px;">
+                                    <tr style="background-color:#CACACA">
+                                        <th class="text-center" style="width:25%;">Date</th>
+                                        <th class="text-center" style="width:25%;">Situation</th>
+                                        <th class="text-center" style="width:25%;">Provision Reçue</th>
+                                        <th class="text-center" style="width:25%;">Lieu de livraison</th>
+                                    </tr>
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                        <tr>
+                                            <td><span t-field="line.date" /></td>
+                                            <td><span t-field="line.situation" /></td>
+                                            <td class="text-right"><span t-field="line.amount" /></td>
+                                            <td><span t-field="line.shipping_address" /></td>
+                                        </tr>
+                                    </t>
+                                    <tr>
+                                        <td class="text-right" style="font-weight:bold; border:0px; border-left:solid white 1px;" colspan="2">TOTAL:</td>
+                                        <td class="text-right" style="font-weight:bold; border:0px;"><span t-field="o.amount_total" /></td>
+                                        <td class="text-right" style="border:0px; border-right:solid white 1px;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_situation_report"
+        model="state.form"
+        report_type="qweb-pdf"
+        string="Situation"
+        name="transit_operation_management.situation_report"
+        file="transit_operation_management.situation_report" />
+
+</odoo>
